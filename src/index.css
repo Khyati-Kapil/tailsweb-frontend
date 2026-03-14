@@ -17,7 +17,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #f6f7fb;
+  background-color: #f5f5b0;
   background-image:
     linear-gradient(to right, rgba(19, 34, 70, 0.08) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(19, 34, 70, 0.08) 1px, transparent 1px);
@@ -25,7 +25,7 @@ body {
 }
 
 .grid-surface {
-  background-color: rgb(247, 255, 224);
+  background-color: rgb(255, 255, 255);
   border: 2px solid #0e0e12;
   box-shadow: 8px 8px 0 #0e0e12;
 }
