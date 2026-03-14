@@ -64,7 +64,7 @@ const StudentDashboard = () => {
   return (
     <div className="min-h-screen px-6 pb-16">
       <div className="mx-auto max-w-6xl">
-        <TopBar title="Student Mission Control" />
+        <TopBar title="Student Dashboard" />
         <section className="mt-10">
           <div className="grid-surface rounded-[24px] p-5">
             <div className="flex items-center justify-between">

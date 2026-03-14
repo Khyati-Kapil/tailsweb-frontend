@@ -25,7 +25,7 @@ body {
 }
 
 .grid-surface {
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgb(247, 255, 224);
   border: 2px solid #0e0e12;
   box-shadow: 8px 8px 0 #0e0e12;
 }
@@ -53,21 +53,16 @@ body {
 
 .block-primary {
   border: 3px solid #0e0e12;
-  background: #2c63ff;
+  background: #5780e5;
   color: #ffffff;
   box-shadow: 8px 8px 0 #0e0e12;
 }
 
-.block-secondary {
-  border: 3px solid #0e0e12;
-  background: #ffd33b;
-  color: #0e0e12;
-  box-shadow: 8px 8px 0 #0e0e12;
-}
+
 
 .button-neo {
   border: 3px solid #0e0e12;
-  background: #2c63ff;
+  background: #5780e5;
   color: #ffffff;
   font-weight: 700;
   letter-spacing: 0.08em;

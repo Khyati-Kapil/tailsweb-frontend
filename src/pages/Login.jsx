@@ -31,28 +31,20 @@ const Login = () => {
   return (
     <div className="min-h-screen px-6 py-12">
       <div className="mx-auto max-w-5xl">
-        <div className="flex justify-center">
-          <div className="badge mono">System status: online</div>
-        </div>
+        
 
         <div className="mt-10 grid gap-8">
           <div className="flex flex-wrap justify-center gap-4">
-            <span className="block-title">Build and Test</span>
-            <span className="block-title bg-white">Assignment Workflow</span>
+           
+            <span className="block-title bg-lime-200">Assignment Workflow</span>
           </div>
 
           <div className="block-primary rounded-[26px] px-8 py-10 text-center">
-            <h1 className="text-4xl font-bold uppercase tracking-[0.2em]">Prototypes</h1>
-            <p className="mt-4 text-base text-white/80">
-              Teachers orchestrate assignments. Students submit once, before the deadline.
-            </p>
+            <h1 className="text-4xl font-bold uppercase tracking-[0.2em]">Assignment Workflow Portal</h1>
+            
           </div>
 
-          <div className="block-secondary rounded-[26px] px-8 py-8 text-center">
-            <p className="mono text-sm uppercase tracking-[0.2em]">
-              A single login for two roles with live workflow tracking.
-            </p>
-          </div>
+          
 
           <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
             <section className="grid-surface rounded-[26px] p-7">
@@ -68,7 +60,7 @@ const Login = () => {
                 </div>
               </div>
               <button type="button" onClick={() => navigate('/signup')} className="button-neo mt-6">
-                Register or login
+                Register
               </button>
             </section>
 

@@ -45,7 +45,7 @@ const Signup = () => {
         <div className="grid gap-8">
           <div className="flex flex-wrap justify-center gap-4">
             <span className="block-title">Register / Login</span>
-            <span className="block-title">Overclock Portal</span>
+            
           </div>
 
           <section className="grid-surface rounded-[26px] p-8">
