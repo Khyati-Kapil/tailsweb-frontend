@@ -48,6 +48,13 @@ const Login = () => {
                 <p className="text-sm text-fog">View published assignments and submit answers.</p>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={() => navigate('/signup')}
+              className="mt-6 rounded-xl border border-ink px-4 py-3 text-sm font-semibold text-ink"
+            >
+              Create an account
+            </button>
           </section>
           <section className="card-surface rounded-3xl p-8 shadow-soft">
             <h2 className="text-2xl font-semibold text-ink">Sign in</h2>
