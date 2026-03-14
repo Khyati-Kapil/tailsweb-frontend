@@ -7,7 +7,8 @@ const statusOptions = ['Draft', 'Published', 'Completed'];
 const emptyForm = {
   title: '',
   description: '',
-  dueDate: ''
+  dueDate: '',
+  attachments: []
 };
 
 const TeacherDashboard = () => {
@@ -48,7 +49,11 @@ const TeacherDashboard = () => {
     event.preventDefault();
     setError('');
     try {
-      await api.post('/assignments', form);
+      await api.post('/assignments', {
+        title: form.title,
+        description: form.description,
+        dueDate: form.dueDate
+      });
       setForm(emptyForm);
       fetchAssignments(1, statusFilter);
     } catch (err) {
@@ -61,7 +66,8 @@ const TeacherDashboard = () => {
     setEditingForm({
       title: assignment.title,
       description: assignment.description,
-      dueDate: assignment.dueDate?.slice(0, 16) || ''
+      dueDate: assignment.dueDate?.slice(0, 16) || '',
+      attachments: []
     });
   };
 
@@ -73,7 +79,11 @@ const TeacherDashboard = () => {
   const saveEdit = async (assignmentId) => {
     setError('');
     try {
-      await api.patch(`/assignments/${assignmentId}`, editingForm);
+      await api.patch(`/assignments/${assignmentId}`, {
+        title: editingForm.title,
+        description: editingForm.description,
+        dueDate: editingForm.dueDate
+      });
       setEditingId('');
       fetchAssignments(page, statusFilter);
     } catch (err) {
@@ -127,56 +137,80 @@ const TeacherDashboard = () => {
     return Array.from({ length: totalPages }, (_, index) => index + 1);
   }, [totalPages]);
 
+  const handleFileSelect = (event, setter) => {
+    const files = Array.from(event.target.files || []);
+    setter((prev) => ({ ...prev, attachments: files }));
+  };
+
   return (
     <div className="min-h-screen px-6 pb-16">
       <div className="mx-auto max-w-6xl">
-        <TopBar title="Teacher Dashboard" />
+        <TopBar title="Teacher Command Deck" />
 
-        <section className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="card-surface rounded-3xl p-6 shadow-soft">
-            <h2 className="text-xl font-semibold text-ink">Create Assignment</h2>
-            <p className="mt-2 text-sm text-fog">Draft assignments can be edited or deleted.</p>
-            <form className="mt-5 grid gap-4" onSubmit={handleCreate}>
+        <section className="mt-10 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="grid-surface rounded-[26px] p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="mono text-xs uppercase tracking-[0.3em] text-slate-700">Create Assignment</p>
+                <h2 className="mt-2 text-2xl font-semibold text-slate-950">Draft a new task</h2>
+              </div>
+              <span className="badge mono">Draft</span>
+            </div>
+            <form className="mt-6 grid gap-4" onSubmit={handleCreate}>
               <input
                 type="text"
                 value={form.title}
                 onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
-                className="rounded-xl border border-slate/20 bg-white/80 px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+                className="input-neo"
                 placeholder="Assignment title"
                 required
               />
               <textarea
                 value={form.description}
                 onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
-                className="min-h-[120px] rounded-xl border border-slate/20 bg-white/80 px-4 py-3 text-sm text-ink outline-none focus:border-ink"
-                placeholder="Assignment description"
+                className="input-neo min-h-[130px]"
+                placeholder="Describe the assignment"
                 required
               />
-              <input
-                type="datetime-local"
-                value={form.dueDate}
-                onChange={(event) => setForm((prev) => ({ ...prev, dueDate: event.target.value }))}
-                className="rounded-xl border border-slate/20 bg-white/80 px-4 py-3 text-sm text-ink outline-none focus:border-ink"
-                required
-              />
-              <button className="rounded-xl bg-ink px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate">
-                Save Draft
+              <div className="grid gap-4 md:grid-cols-2">
+                <input
+                  type="datetime-local"
+                  value={form.dueDate}
+                  onChange={(event) => setForm((prev) => ({ ...prev, dueDate: event.target.value }))}
+                  className="input-neo"
+                  required
+                />
+                <label className="grid gap-2 text-sm text-slate-800">
+                  Attach files
+                  <input
+                    type="file"
+                    multiple
+                    onChange={(event) => handleFileSelect(event, setForm)}
+                    className="input-neo"
+                  />
+                </label>
+              </div>
+              {form.attachments.length > 0 && (
+                <div className="rounded-2xl border-2 border-slate-950 bg-white p-3 text-xs text-slate-700">
+                  {form.attachments.map((file) => file.name).join(', ')}
+                </div>
+              )}
+              <button className="button-neo" type="submit">
+                Save draft
               </button>
             </form>
           </div>
 
-          <div className="card-surface rounded-3xl p-6 shadow-soft">
-            <h2 className="text-xl font-semibold text-ink">Filter Assignments</h2>
+          <div className="grid-surface rounded-[26px] p-6">
+            <h2 className="text-xl font-semibold text-slate-950">Filter assignments</h2>
             <div className="mt-4 flex flex-wrap gap-2">
               {statusOptions.map((option) => (
                 <button
                   key={option}
                   type="button"
                   onClick={() => setStatusFilter(option)}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                    statusFilter === option
-                      ? 'bg-ink text-white'
-                      : 'border border-slate/20 bg-white/70 text-slate hover:border-ink'
+                  className={`rounded-full border-2 px-4 py-2 text-xs font-semibold transition ${
+                    statusFilter === option ? 'border-slate-950 bg-white card-shadow' : 'border-slate-950/40 bg-white'
                   }`}
                 >
                   {option}
@@ -184,15 +218,15 @@ const TeacherDashboard = () => {
               ))}
             </div>
             <div className="mt-6">
-              <p className="text-sm text-fog">Total pages: {totalPages}</p>
+              <p className="mono text-xs uppercase tracking-[0.25em] text-slate-600">Pages</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {pageList.map((pageNumber) => (
                   <button
                     key={pageNumber}
                     type="button"
                     onClick={() => fetchAssignments(pageNumber, statusFilter)}
-                    className={`h-9 w-9 rounded-full text-sm font-semibold transition ${
-                      pageNumber === page ? 'bg-ink text-white' : 'bg-white/70 text-slate'
+                    className={`h-10 w-10 rounded-full border-2 text-xs font-semibold ${
+                      pageNumber === page ? 'border-slate-950 bg-white card-shadow' : 'border-slate-950/40 bg-white'
                     }`}
                   >
                     {pageNumber}
@@ -205,56 +239,48 @@ const TeacherDashboard = () => {
 
         <section className="mt-10">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-ink">Assignments</h2>
-            {loading && <span className="text-sm text-fog">Loading...</span>}
+            <h2 className="text-2xl font-semibold text-slate-950">Assignments</h2>
+            {loading && <span className="mono text-xs uppercase tracking-[0.2em] text-slate-600">Loading</span>}
           </div>
-          {error && <p className="mt-3 rounded-xl border border-coral/40 bg-coral/10 px-4 py-3 text-sm text-coral">{error}</p>}
+          {error && <p className="mt-3 rounded-2xl border-2 border-slate-950 bg-white px-4 py-3 text-sm text-slate-700">{error}</p>}
           <div className="mt-6 grid gap-5 md:grid-cols-2">
             {assignments.map((assignment) => {
               const isEditing = editingId === assignment._id;
               return (
-                <article key={assignment._id} className="card-surface rounded-3xl p-6 shadow-soft">
-                  <div className="flex items-start justify-between">
+                <article key={assignment._id} className="grid-surface rounded-[24px] p-6">
+                  <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.3em] text-fog">{assignment.status}</p>
+                      <p className="mono text-xs uppercase tracking-[0.3em] text-slate-600">{assignment.status}</p>
                       {isEditing ? (
                         <input
                           value={editingForm.title}
                           onChange={(event) => setEditingForm((prev) => ({ ...prev, title: event.target.value }))}
-                          className="mt-2 w-full rounded-xl border border-slate/20 bg-white/80 px-3 py-2 text-sm text-ink outline-none"
+                          className="input-neo mt-2"
                         />
                       ) : (
-                        <h3 className="mt-2 text-xl font-semibold text-ink">{assignment.title}</h3>
+                        <h3 className="mt-2 text-xl font-semibold text-slate-950">{assignment.title}</h3>
                       )}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => loadSubmissions(assignment)}
-                      className="rounded-full border border-slate/20 px-3 py-2 text-xs font-semibold text-slate"
-                    >
-                      View submissions
+                    <button type="button" onClick={() => loadSubmissions(assignment)} className="button-ghost text-xs">
+                      Submissions
                     </button>
                   </div>
                   {isEditing ? (
                     <textarea
                       value={editingForm.description}
                       onChange={(event) => setEditingForm((prev) => ({ ...prev, description: event.target.value }))}
-                      className="mt-4 min-h-[100px] w-full rounded-xl border border-slate/20 bg-white/80 px-3 py-2 text-sm text-ink outline-none"
+                      className="input-neo mt-4 min-h-[100px]"
                     />
                   ) : (
-                    <p className="mt-4 text-sm text-slate">{assignment.description}</p>
+                    <p className="mt-4 text-sm text-slate-700">{assignment.description}</p>
                   )}
-                  <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-fog">
+                  <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-600">
                     <span>Due: {new Date(assignment.dueDate).toLocaleString()}</span>
                     <span>Updated: {new Date(assignment.updatedAt).toLocaleString()}</span>
                   </div>
                   <div className="mt-5 flex flex-wrap gap-2">
                     {assignment.status === 'Draft' && !isEditing && (
-                      <button
-                        type="button"
-                        onClick={() => startEdit(assignment)}
-                        className="rounded-full border border-slate/20 px-4 py-2 text-xs font-semibold text-slate"
-                      >
+                      <button type="button" onClick={() => startEdit(assignment)} className="button-ghost text-xs">
                         Edit
                       </button>
                     )}
@@ -262,7 +288,7 @@ const TeacherDashboard = () => {
                       <button
                         type="button"
                         onClick={() => deleteAssignment(assignment._id)}
-                        className="rounded-full border border-coral/40 px-4 py-2 text-xs font-semibold text-coral"
+                        className="button-ghost text-xs"
                       >
                         Delete
                       </button>
@@ -271,7 +297,7 @@ const TeacherDashboard = () => {
                       <button
                         type="button"
                         onClick={() => transitionStatus(assignment._id, 'Published')}
-                        className="rounded-full bg-ink px-4 py-2 text-xs font-semibold text-white"
+                        className="button-neo"
                       >
                         Publish
                       </button>
@@ -280,26 +306,18 @@ const TeacherDashboard = () => {
                       <button
                         type="button"
                         onClick={() => transitionStatus(assignment._id, 'Completed')}
-                        className="rounded-full bg-ink px-4 py-2 text-xs font-semibold text-white"
+                        className="button-neo"
                       >
                         Mark completed
                       </button>
                     )}
                     {isEditing && (
-                      <button
-                        type="button"
-                        onClick={() => saveEdit(assignment._id)}
-                        className="rounded-full bg-ink px-4 py-2 text-xs font-semibold text-white"
-                      >
+                      <button type="button" onClick={() => saveEdit(assignment._id)} className="button-neo">
                         Save
                       </button>
                     )}
                     {isEditing && (
-                      <button
-                        type="button"
-                        onClick={cancelEdit}
-                        className="rounded-full border border-slate/20 px-4 py-2 text-xs font-semibold text-slate"
-                      >
+                      <button type="button" onClick={cancelEdit} className="button-ghost">
                         Cancel
                       </button>
                     )}
@@ -311,45 +329,41 @@ const TeacherDashboard = () => {
         </section>
 
         {submissionsAssignment && (
-          <section className="mt-10 card-surface rounded-3xl p-6 shadow-soft">
+          <section className="mt-10 grid-surface rounded-[26px] p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-fog">Submissions</p>
-                <h3 className="mt-2 text-2xl font-semibold text-ink">{submissionsAssignment.title}</h3>
+                <p className="mono text-xs uppercase tracking-[0.3em] text-slate-600">Submissions</p>
+                <h3 className="mt-2 text-2xl font-semibold text-slate-950">{submissionsAssignment.title}</h3>
               </div>
-              <button
-                type="button"
-                onClick={() => setSubmissionsAssignment(null)}
-                className="rounded-full border border-slate/20 px-4 py-2 text-xs font-semibold text-slate"
-              >
+              <button type="button" onClick={() => setSubmissionsAssignment(null)} className="button-ghost">
                 Close
               </button>
             </div>
             <div className="mt-6 grid gap-4">
               {submissions.length === 0 && (
-                <p className="text-sm text-fog">No submissions yet.</p>
+                <p className="text-sm text-slate-600">No submissions yet.</p>
               )}
               {submissions.map((submission) => (
-                <div key={submission._id} className="rounded-2xl border border-slate/10 bg-white/70 p-4">
+                <div key={submission._id} className="rounded-2xl border-2 border-slate-950 bg-white p-4">
                   <div className="flex flex-wrap items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm font-semibold text-ink">{submission.student?.name || 'Student'}</p>
-                      <p className="text-xs text-fog">{submission.student?.email}</p>
+                      <p className="text-sm font-semibold text-slate-950">{submission.student?.name || 'Student'}</p>
+                      <p className="text-xs text-slate-600">{submission.student?.email}</p>
                     </div>
-                    <div className="text-xs text-fog">
+                    <div className="text-xs text-slate-600">
                       Submitted {new Date(submission.submittedAt).toLocaleString()}
                     </div>
                   </div>
-                  <p className="mt-3 text-sm text-slate">{submission.answerText}</p>
+                  <p className="mt-3 text-sm text-slate-700">{submission.answerText}</p>
                   <div className="mt-3 flex items-center gap-3">
-                    <span className="text-xs text-fog">
+                    <span className="text-xs text-slate-600">
                       {submission.reviewedAt ? 'Reviewed' : 'Pending review'}
                     </span>
                     {!submission.reviewedAt && (
                       <button
                         type="button"
                         onClick={() => markReviewed(submission._id)}
-                        className="rounded-full border border-ink px-3 py-1 text-xs font-semibold text-ink"
+                        className="button-ghost text-xs"
                       >
                         Mark reviewed
                       </button>

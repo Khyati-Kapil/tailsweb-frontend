@@ -30,68 +30,80 @@ const Login = () => {
 
   return (
     <div className="min-h-screen px-6 py-12">
-      <div className="mx-auto max-w-4xl">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-          <section className="card-surface rounded-3xl p-8 shadow-soft">
-            <p className="text-xs uppercase tracking-[0.35em] text-fog">Single Login</p>
-            <h1 className="mt-4 text-4xl font-semibold text-ink">Assignment Workflow Portal</h1>
-            <p className="mt-4 text-base text-slate">
-              Teachers manage assignment lifecycles. Students submit answers before deadlines. Sign in to continue.
+      <div className="mx-auto max-w-5xl">
+        <div className="flex justify-center">
+          <div className="badge mono">System status: online</div>
+        </div>
+
+        <div className="mt-10 grid gap-8">
+          <div className="flex flex-wrap justify-center gap-4">
+            <span className="block-title">Build and Test</span>
+            <span className="block-title bg-white">Assignment Workflow</span>
+          </div>
+
+          <div className="block-primary rounded-[26px] px-8 py-10 text-center">
+            <h1 className="text-4xl font-bold uppercase tracking-[0.2em]">Prototypes</h1>
+            <p className="mt-4 text-base text-white/80">
+              Teachers orchestrate assignments. Students submit once, before the deadline.
             </p>
-            <div className="mt-8 grid gap-4">
-              <div className="rounded-2xl border border-slate/10 bg-white/70 p-4">
-                <p className="text-sm font-semibold text-ink">Teacher access</p>
-                <p className="text-sm text-fog">Create, publish, and review submissions.</p>
+          </div>
+
+          <div className="block-secondary rounded-[26px] px-8 py-8 text-center">
+            <p className="mono text-sm uppercase tracking-[0.2em]">
+              A single login for two roles with live workflow tracking.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+            <section className="grid-surface rounded-[26px] p-7">
+              <h2 className="text-2xl font-semibold text-slate-950">Why use this portal</h2>
+              <div className="mt-5 grid gap-4">
+                <div className="rounded-2xl border-2 border-slate-950 bg-white p-4">
+                  <p className="mono text-xs uppercase tracking-[0.18em] text-slate-600">Teacher flow</p>
+                  <p className="mt-2 text-sm text-slate-700">Draft, publish, review, complete.</p>
+                </div>
+                <div className="rounded-2xl border-2 border-slate-950 bg-white p-4">
+                  <p className="mono text-xs uppercase tracking-[0.18em] text-slate-600">Student flow</p>
+                  <p className="mt-2 text-sm text-slate-700">Submit once and track status.</p>
+                </div>
               </div>
-              <div className="rounded-2xl border border-slate/10 bg-white/70 p-4">
-                <p className="text-sm font-semibold text-ink">Student access</p>
-                <p className="text-sm text-fog">View published assignments and submit answers.</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => navigate('/signup')}
-              className="mt-6 rounded-xl border border-ink px-4 py-3 text-sm font-semibold text-ink"
-            >
-              Create an account
-            </button>
-          </section>
-          <section className="card-surface rounded-3xl p-8 shadow-soft">
-            <h2 className="text-2xl font-semibold text-ink">Sign in</h2>
-            <p className="mt-2 text-sm text-fog">Use the same login for both roles.</p>
-            <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
-              <label className="grid gap-2 text-sm text-ink">
-                Email
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  className="rounded-xl border border-slate/20 bg-white/80 px-4 py-3 text-sm text-ink outline-none focus:border-ink"
-                  placeholder="you@example.com"
-                  required
-                />
-              </label>
-              <label className="grid gap-2 text-sm text-ink">
-                Password
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  className="rounded-xl border border-slate/20 bg-white/80 px-4 py-3 text-sm text-ink outline-none focus:border-ink"
-                  placeholder="Your password"
-                  required
-                />
-              </label>
-              {error && <p className="rounded-xl border border-coral/40 bg-coral/10 px-4 py-3 text-sm text-coral">{error}</p>}
-              <button
-                type="submit"
-                disabled={loading}
-                className="rounded-xl bg-ink px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate disabled:opacity-70"
-              >
-                {loading ? 'Signing in...' : 'Continue'}
+              <button type="button" onClick={() => navigate('/signup')} className="button-neo mt-6">
+                Register or login
               </button>
-            </form>
-          </section>
+            </section>
+
+            <section className="grid-surface rounded-[26px] p-7">
+              <h2 className="text-2xl font-semibold text-slate-950">Sign in</h2>
+              <form className="mt-5 grid gap-4" onSubmit={handleSubmit}>
+                <label className="grid gap-2 text-sm text-slate-900">
+                  Email
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    className="input-neo"
+                    placeholder="you@example.com"
+                    required
+                  />
+                </label>
+                <label className="grid gap-2 text-sm text-slate-900">
+                  Password
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    className="input-neo"
+                    placeholder="Your password"
+                    required
+                  />
+                </label>
+                {error && <p className="rounded-xl border-2 border-slate-950 bg-white px-4 py-3 text-sm text-slate-700">{error}</p>}
+                <button type="submit" disabled={loading} className="button-neo">
+                  {loading ? 'Signing in...' : 'Proceed to dashboard'}
+                </button>
+              </form>
+            </section>
+          </div>
         </div>
       </div>
     </div>
