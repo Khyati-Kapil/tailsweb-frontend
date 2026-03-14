@@ -66,18 +66,20 @@ const StudentDashboard = () => {
       <div className="mx-auto max-w-6xl">
         <TopBar title="Student Mission Control" />
         <section className="mt-10">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-slate-950">Published assignments</h2>
-            {loading && <span className="mono text-xs uppercase tracking-[0.2em] text-slate-600">Loading</span>}
+          <div className="grid-surface rounded-[24px] p-5">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-semibold text-slate-950">Published assignments</h2>
+              {loading && <span className="mono text-xs uppercase tracking-[0.2em] text-slate-600">Loading</span>}
+            </div>
           </div>
-          {error && <p className="mt-3 rounded-2xl border-2 border-slate-950 bg-white px-4 py-3 text-sm text-slate-700">{error}</p>}
-          <div className="mt-6 grid gap-5 md:grid-cols-2">
+          {error && <p className="mt-4 rounded-2xl border-2 border-slate-950 bg-white px-4 py-3 text-sm text-slate-700">{error}</p>}
+          <div className="mt-6 grid gap-5">
             {assignments.map((assignment) => {
               const submission = submissions[assignment._id];
               const dueDate = new Date(assignment.dueDate);
               const isOverdue = dueDate < now;
               return (
-                <article key={assignment._id} className="grid-surface rounded-[24px] p-6">
+                <article key={assignment._id} className="grid-surface w-full rounded-[24px] p-6">
                   <p className="mono text-xs uppercase tracking-[0.3em] text-slate-600">Published</p>
                   <h3 className="mt-2 text-xl font-semibold text-slate-950">{assignment.title}</h3>
                   <p className="mt-3 text-sm text-slate-700">{assignment.description}</p>
